@@ -1,45 +1,74 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import axios from 'axios';
 import './App.css';
 import Left from './Left';
 import Right from './Right';
 import './index.css'
+import {initialState, reducer, MyContext} from './Store'
 
 
-class App extends Component{
-  constructor(props){
-      super(props);
-      this.state = {
-          data : []
-      }
+
+
+
+
+
+
+
+
+const App = () => {
+  const [city, dispatch] = useReducer(reducer, initialState);
+  const [data, setData] = useState([])
+  const [cord, setCord] = useState('')
+
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  
+  function success(pos) {
+    var crd = pos.coords;
+  console.log('-----------------',{
+    lat: crd.latitude,
+    long:crd.longitude,
+    accuracy:crd.accuracy
+  })
+  setCord({
+    lat: crd.latitude,
+    long:crd.longitude,
+    accuracy:crd.accuracy
+  })
   }
+  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  
+  navigator.geolocation.getCurrentPosition(success, error, options);
 
-
-  componentDidMount(){
-
-    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=dodoma&APPID=7f6a0fe6f25df85a9176f605964e2fb0`)
+  const cccc = city.cityName === "noCity" ? `lat=${cord.lat}&lon=${cord.long}` : `q=${city.cityName}`
+useEffect(()=>{
+    axios.get(`http://api.openweathermap.org/data/2.5/weather?${cccc}&APPID=7f6a0fe6f25df85a9176f605964e2fb0`)
     .then( (response) => {
-      console.log(response.data)
-      this.setState({ 
-        data: response.data
-      })
+      console.log("This is the res[onse : ",response.data)
+      setData(response.data)
     })
     .catch( (error) => {
       console.log(error);
     })
     .finally(() => {
-    });
-      }
-      
-  render(){
-      console.log(this.state)
-      return(
-        <div className="App">
-        <Right />
-        <Left />
-      </div>
+    })
+  
+  }, [cccc])
+
+  return(
+  <div className="App">
+    <MyContext.Provider value={{ city, dispatch }}>
+      <Right data={data}/>
+      {city.cityName && <Left data={data} />}
+    </MyContext.Provider>
+  </div>
       )
-  }
 }
 
 export default App
