@@ -19,11 +19,4 @@ const initialState = {
     }
   }
 
-
-
-
-
-
-
-
 export {reducer, initialState, MyContext}

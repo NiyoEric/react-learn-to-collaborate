@@ -8,13 +8,6 @@ import {initialState, reducer, MyContext} from './Store'
 
 
 
-
-
-
-
-
-
-
 const App = () => {
   const [city, dispatch] = useReducer(reducer, initialState);
   const [data, setData] = useState([])
@@ -28,11 +21,6 @@ const App = () => {
   
   function success(pos) {
     var crd = pos.coords;
-  console.log('-----------------',{
-    lat: crd.latitude,
-    long:crd.longitude,
-    accuracy:crd.accuracy
-  })
   setCord({
     lat: crd.latitude,
     long:crd.longitude,
