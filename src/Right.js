@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import img from './images/pexels-photo-1591447.jpeg';
 
 function App() {

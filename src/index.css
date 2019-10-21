@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing:border-box;
 }
 
 html {
@@ -14,6 +15,7 @@ body {
 .App {
     display: flex;
     height: 100vh;
+    background-color: #182324;
 }
 
 .Right {
